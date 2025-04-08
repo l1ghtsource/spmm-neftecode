@@ -14,7 +14,6 @@ from tqdm import tqdm
 from bisect import bisect_left
 warnings.filterwarnings(action='ignore')
 
-
 def BinarySearch(a, x):
     i = bisect_left(a, x)
     if i != len(a) and a[i] == x:
@@ -22,10 +21,10 @@ def BinarySearch(a, x):
     else:
         return -1
 
-
 def generate(model, image_embeds, text, stochastic=True, prop_att_mask=None, k=None):
     text_atts = torch.where(text == 0, 0, 1)
-    if prop_att_mask is None:   prop_att_mask = torch.ones(image_embeds.size()[:-1], dtype=torch.long).to(image_embeds.device)
+    if prop_att_mask is None:   
+        prop_att_mask = torch.ones(image_embeds.size()[:-1], dtype=torch.long).to(image_embeds.device)
     token_output = model.text_encoder(text,
                                       attention_mask=text_atts,
                                       encoder_hidden_states=image_embeds,
@@ -50,12 +49,10 @@ def generate(model, image_embeds, text, stochastic=True, prop_att_mask=None, k=N
         token_output = torch.argmax(token_output, dim=-1)
     return token_output.unsqueeze(1)  # batch*1
 
-
 @torch.no_grad()
 def generate_with_property(model, properties, n_sample, prop_mask, k=2, stochastic=True):
     device = model.device
     tokenizer = model.tokenizer
-    # test
     model.eval()
     print(f"PV-to-SMILES generation in {'stochastic' if stochastic else 'deterministic'} manner with k={k}...")
 
@@ -73,13 +70,12 @@ def generate_with_property(model, properties, n_sample, prop_mask, k=2, stochast
     property_masked = property1 * (1 - mpm_mask_expand) + property_unk * mpm_mask_expand
 
     properties = torch.cat([model.property_cls.expand(property_masked.size(0), -1, -1), property_masked], dim=1)
-    prop_embeds = model.property_encoder(inputs_embeds=properties, return_dict=True).last_hidden_state  # batch*len(=patch**2+1)*feature
+    prop_embeds = model.property_encoder(inputs_embeds=properties, return_dict=True).last_hidden_state
 
     candidate = []
     for _ in tqdm(range(n_sample)):
         product_input = torch.tensor([tokenizer.cls_token_id]).expand(1, 1).to(device)
         values, indices = generate(model, prop_embeds, product_input, stochastic=stochastic, k=k)
-        # print(values, indices, values.size(), indices.size())
         product_input = torch.cat([torch.tensor([tokenizer.cls_token_id]).expand(k, 1).to(device), indices.squeeze(0).unsqueeze(-1)], dim=-1)
         current_p = values.squeeze(0)
         final_output = []
@@ -109,7 +105,6 @@ def generate_with_property(model, properties, n_sample, prop_mask, k=2, stochast
         else:
             candidate.append(random.choice(candidate_k))
     return candidate
-
 
 @torch.no_grad()
 def metric_eval(prop_input, cand, mask):
@@ -148,12 +143,10 @@ def metric_eval(prop_input, cand, mask):
         for v in valids:    w.write(v + '\n')
     print('Generated molecules are saved in \'generated_molecules.txt\'')
 
-
 def main(args, config):
     device = torch.device(args.device)
 
-    # fix the seed for reproducibility
-    seed = random.randint(0, 1000)
+    seed = random.randint(0, 1000) if not args.seed else args.seed
     print('seed:', seed, args.stochastic)
     torch.manual_seed(seed)
     np.random.seed(seed)
@@ -163,7 +156,6 @@ def main(args, config):
     tokenizer = BertTokenizer(vocab_file=args.vocab_filename, do_lower_case=False, do_basic_tokenize=False)
     tokenizer.wordpiece_tokenizer = WordpieceTokenizer(vocab=tokenizer.vocab, unk_token=tokenizer.unk_token, max_input_chars_per_word=250)
 
-    # === Model === #
     print("Creating model")
     model = SPMM(config=config, tokenizer=tokenizer, no_train=True)
 
@@ -183,59 +175,43 @@ def main(args, config):
         print(msg)
     model = model.to(device)
 
-    property_to_index = {}
-    with open('./property_name.txt', 'r') as f:
-        for idx, line in enumerate(f):
-            property_to_index[line.strip()] = idx
+    logP_position = 30  # MolLogP 
+    h_donors_position = 42  # NumHDonors
 
-    '''condition for stochastic molecule generation with a file s2p_input.csv'''
-    prop_mask, prop_input = torch.ones(53), torch.zeros(53)
-    for idx, row in pd.read_csv('./p2s_input.csv').iterrows():
-        prop_input[property_to_index[row['property']]] = float(row['input_value'])
-        prop_mask[property_to_index[row['property']]] = 0
+    if not args.smiles:
+        print("Error: SMILES string is required. Use --smiles argument.")
+        return
     
-    '''condition for stochastic molecule generation of Fig.2-(a)'''
-    # prop_mask = torch.zeros(53)  # 0 indicates no masking for that property
-    # prop_input = calculate_property('COc1cccc(NC(=O)CN(C)C(=O)COC(=O)c2cc(c3cccs3)nc3ccccc23)c1')
-
-    '''condition for stochastic molecule generation of Fig.2-(b)'''
-    # prop_mask = torch.ones(53)        # 1 indicates masking for that property
-    # prop_mask[14] = 0
-    # prop_input = torch.zeros(53)
-    # prop_input[14] = 150
-
-    '''condition for stochastic molecule generation of Fig.2-(c)'''
-    # prop_mask = torch.ones(53)
-    # prop_mask[[50, 40, 51, 52]] = 0
-    # prop_input = torch.zeros(53)
-    # prop_input[50] = 2
-    # prop_input[40] = 1
-    # prop_input[51] = 30
-    # prop_input[52] = 0.8
-
-    '''condition for stochastic molecule generation of Fig.2-(d)'''
-    # prop_mask = torch.ones(53)
-    # prop_input = torch.zeros(53)
-
+    properties = calculate_property(args.smiles)
+    
+    prop_mask = torch.ones(53)
+    prop_mask[logP_position] = 0
+    prop_mask[h_donors_position] = 0
+    
+    prop_input = torch.zeros(53)
+    prop_input[logP_position] = properties[logP_position] 
+    prop_input[h_donors_position] = properties[h_donors_position] 
+    
     print("=" * 50)
     samples = generate_with_property(model, prop_input, args.n_generate, prop_mask, stochastic=args.stochastic, k=args.k)
     metric_eval(prop_input, samples, prop_mask)
     print("=" * 50)
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--checkpoint', default='./Pretrain/checkpoint_SPMM.ckpt')
     parser.add_argument('--vocab_filename', default='./vocab_bpe_300.txt')
     parser.add_argument('--device', default='cuda')
-    parser.add_argument('--n_generate', default=1000, type=int)
+    parser.add_argument('--n_generate', default=10, type=int)
     parser.add_argument('--k', default=2, type=int)
     parser.add_argument('--stochastic', default=True, type=bool)
-    arg = parser.parse_args()
+    parser.add_argument('--smiles', required=True, help='input smiles')
+    parser.add_argument('--seed', type=int, help='seed (semen)')
+    args = parser.parse_args()
 
     configs = {
         'embed_dim': 256,
         'bert_config_text': './config_bert.json',
         'bert_config_property': './config_bert_property.json',
     }
-    main(arg, configs)
+    main(args, configs)
