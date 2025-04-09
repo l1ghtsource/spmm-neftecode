@@ -175,22 +175,23 @@ def main(args, config):
         print(msg)
     model = model.to(device)
 
-    logP_position = 30  # MolLogP 
-    h_donors_position = 42  # NumHDonors
-
     if not args.smiles:
         print("Error: SMILES string is required. Use --smiles argument.")
         return
     
     properties = calculate_property(args.smiles)
     
+    prop_positions = args.property_positions
+    
+    print(f"Using property positions: {prop_positions}")
+    
     prop_mask = torch.ones(53)
-    prop_mask[logP_position] = 0
-    prop_mask[h_donors_position] = 0
+    for pos in prop_positions:
+        prop_mask[pos] = 0
     
     prop_input = torch.zeros(53)
-    prop_input[logP_position] = properties[logP_position] 
-    prop_input[h_donors_position] = properties[h_donors_position] 
+    for pos in prop_positions:
+        prop_input[pos] = properties[pos]
     
     print("=" * 50)
     samples = generate_with_property(model, prop_input, args.n_generate, prop_mask, stochastic=args.stochastic, k=args.k)
@@ -207,6 +208,8 @@ if __name__ == '__main__':
     parser.add_argument('--stochastic', default=True, type=bool)
     parser.add_argument('--smiles', required=True, help='input smiles')
     parser.add_argument('--seed', type=int, help='seed (semen)')
+    parser.add_argument('--property_positions', type=int, nargs='+', default=[30, 42], 
+                        help='List of property positions to use (default: [30, 42] for MolLogP and NumHDonors)')
     args = parser.parse_args()
 
     configs = {
