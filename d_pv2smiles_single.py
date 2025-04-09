@@ -8,6 +8,7 @@ from torch.distributions.categorical import Categorical
 from rdkit import Chem
 import random
 import numpy as np
+import pandas as pd
 import pickle
 import warnings
 from tqdm import tqdm
@@ -175,28 +176,52 @@ def main(args, config):
         print(msg)
     model = model.to(device)
 
-    if not args.smiles:
-        print("Error: SMILES string is required. Use --smiles argument.")
+    if not args.csv_file:
+        print("Error: CSV file path is required. Use --csv_file argument.")
         return
     
-    properties = calculate_property(args.smiles)
+    os.makedirs(os.path.dirname(args.output_dir), exist_ok=True)
+    
+    df = pd.read_csv(args.csv_file)
+    
+    if 'Smiles' not in df.columns:
+        print("Error: CSV file must contain a 'Smiles' column.")
+        return
     
     prop_positions = args.property_positions
-    
     print(f"Using property positions: {prop_positions}")
     
-    prop_mask = torch.ones(53)
-    for pos in prop_positions:
-        prop_mask[pos] = 0
-    
-    prop_input = torch.zeros(53)
-    for pos in prop_positions:
-        prop_input[pos] = properties[pos]
-    
-    print("=" * 50)
-    samples = generate_with_property(model, prop_input, args.n_generate, prop_mask, stochastic=args.stochastic, k=args.k)
-    metric_eval(prop_input, samples, prop_mask)
-    print("=" * 50)
+    for i, smiles in enumerate(df['Smiles']):
+        print(f"Processing molecule {i+1}/{len(df)}: {smiles}")
+        
+        try:
+            properties = calculate_property(smiles)
+            
+            prop_mask = torch.ones(53)
+            for pos in prop_positions:
+                prop_mask[pos] = 0
+            
+            prop_input = torch.zeros(53)
+            for pos in prop_positions:
+                prop_input[pos] = properties[pos]
+            
+            print("=" * 50)
+            samples = generate_with_property(model, prop_input, args.n_generate, prop_mask, stochastic=args.stochastic, k=args.k)
+            
+            output_file = os.path.join(args.output_dir, f"generated_molecules_{i}.txt")
+            with open(output_file, 'w') as f:
+                for sample in samples:
+                    f.write(f"{sample}\n")
+            
+            print(f"Saved {len(samples)} generated molecules to {output_file}")
+            metric_eval(prop_input, samples, prop_mask)
+            print("=" * 50)
+        
+        except Exception as e:
+            print(f"Error processing molecule {i}: {e}")
+            output_file = os.path.join(args.output_dir, f"generated_molecules_{i}.txt")
+            with open(output_file, 'w') as f:
+                f.write(f"Error: {e}\n")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -206,7 +231,8 @@ if __name__ == '__main__':
     parser.add_argument('--n_generate', default=10, type=int)
     parser.add_argument('--k', default=2, type=int)
     parser.add_argument('--stochastic', default=True, type=bool)
-    parser.add_argument('--smiles', required=True, help='input smiles')
+    parser.add_argument('--csv_file', required=True, help='input CSV file with Smiles column')
+    parser.add_argument('--output_dir', default='./generated_molecules', help='directory to save generated molecules')
     parser.add_argument('--seed', type=int, help='seed (semen)')
     parser.add_argument('--property_positions', type=int, nargs='+', default=[30, 42], 
                         help='List of property positions to use (default: [30, 42] for MolLogP and NumHDonors)')
