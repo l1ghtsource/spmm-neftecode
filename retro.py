@@ -121,7 +121,7 @@ if st.button("🔬 Predict Retrosynthesis"):
             progress_bar = st.progress(0)
             status_text = st.empty()
             
-            max_attempts = 300
+            max_attempts = 50
             attempt = 0
             
             while status != "SUCCESS" and attempt < max_attempts:
