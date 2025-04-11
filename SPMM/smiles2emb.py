@@ -8,8 +8,8 @@ from transformers import BertTokenizer, WordpieceTokenizer
 import random
 
 @torch.no_grad()
-def get_smiles_embeddings(model, smiles_list, batch_size=64):
-    """Extract embeddings for SMILES strings using only the text encoder"""
+def get_smiles_embeddings(model, smiles_list):
+    """Extract embeddings for SMILES strings using only the text encoder - process one at a time"""
     device = model.device
     tokenizer = model.tokenizer
     model.eval()
@@ -17,14 +17,15 @@ def get_smiles_embeddings(model, smiles_list, batch_size=64):
     
     all_embeddings = []
     
-    for i in range(0, len(smiles_list), batch_size):
-        batch_smiles = smiles_list[i:i+batch_size]
+    for i, smiles in enumerate(smiles_list):
+        # Process single SMILES
+        processed_smiles = '[CLS]' + smiles if not smiles.startswith("[CLS]") else smiles
         
-        processed_smiles = ['[CLS]'+s if not s.startswith("[CLS]") else s for s in batch_smiles]
-        
-        text_input = tokenizer(processed_smiles, padding='longest', truncation=True, 
+        # Tokenize single SMILES
+        text_input = tokenizer([processed_smiles], padding='max_length', truncation=True, 
                               max_length=100, return_tensors="pt").to(device)
         
+        # Get embedding for the SMILES
         text_embeds = model.text_encoder.bert(
             text_input.input_ids[:, 1:], 
             attention_mask=text_input.attention_mask[:, 1:],
@@ -32,17 +33,20 @@ def get_smiles_embeddings(model, smiles_list, batch_size=64):
             mode='text'
         ).last_hidden_state
         
+        # Calculate mean embedding
         mask = text_input.attention_mask[:, 1:].unsqueeze(-1)
         masked_embeddings = text_embeds * mask
         sum_embeddings = torch.sum(masked_embeddings, dim=1)
         sum_mask = torch.clamp(torch.sum(mask, dim=1), min=1e-9)
         mean_embeddings = sum_embeddings / sum_mask
         
-        batch_embeddings = mean_embeddings.cpu().numpy()
-        all_embeddings.extend(batch_embeddings)
+        # Store embedding
+        embedding = mean_embeddings.cpu().numpy()[0]  # Get the first (only) item
+        all_embeddings.append(embedding)
         
-        if (i + batch_size) % (10 * batch_size) == 0 or (i + batch_size) >= len(smiles_list):
-            print(f"Processed {min(i + batch_size, len(smiles_list))}/{len(smiles_list)} SMILES")
+        # Print progress
+        if (i + 1) % 100 == 0 or (i + 1) == len(smiles_list):
+            print(f"Processed {i + 1}/{len(smiles_list)} SMILES")
     
     return all_embeddings
 
@@ -94,11 +98,8 @@ def main(args, config):
     model = model.to(device)
 
     print("=" * 50)
-    embeddings = get_smiles_embeddings(
-        model, 
-        smiles_list, 
-        batch_size=config['batch_size_test']
-    )
+    # Process SMILES strings individually (no batching)
+    embeddings = get_smiles_embeddings(model, smiles_list)
     
     df[args.embed_column] = [e.tolist() for e in embeddings]
     
@@ -122,7 +123,7 @@ if __name__ == '__main__':
 
     config = {
         'embed_dim': 256,
-        'batch_size_test': 64,
+        'batch_size_test': 64,  # No longer used but kept for compatibility
         'bert_config_text': './config_bert.json',
         'bert_config_property': './config_bert_property.json',
     }
