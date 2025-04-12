@@ -1,0 +1,6 @@
+filename,total,valid_syntax,valid_molecule,neutral,allowed_atoms,mw_valid,soluble,is_phenol_or_amine,all_valid,output_file
+generated_molecules_2.txt,100,84,79,78,67,65,65,16,16,valid_generated_molecules_2.txt
+generated_molecules_1.txt,100,91,87,87,73,73,73,18,18,valid_generated_molecules_1.txt
+generated_molecules_0.txt,100,89,67,66,65,64,64,44,44,valid_generated_molecules_0.txt
+generated_molecules_3.txt,100,95,78,74,74,74,74,69,69,valid_generated_molecules_3.txt
+generated_molecules_4.txt,100,90,81,80,5,5,5,0,0,valid_generated_molecules_4.txt
