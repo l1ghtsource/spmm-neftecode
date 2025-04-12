@@ -2,3 +2,4 @@
 *.ckpt
 SPMM/__pycache__
 SPMM/scheduler/__pycache__
+catboost_info/
