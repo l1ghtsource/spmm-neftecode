@@ -1,0 +1,19 @@
+SMILES: CNC(Cc1c[nH]c2ccccc12)C(Cc1ccccc1)N(C)C
+Prediction ID: 67fa1c4ce0c12569dca89f51
+Number of paths: 5
+
+Path 1 - Confidence: 0.902
+Number of reactions: 3
+
+Path 2 - Confidence: 0.902
+Number of reactions: 3
+
+Path 3 - Confidence: 0.902
+Number of reactions: 3
+
+Path 4 - Confidence: 0.902
+Number of reactions: 3
+
+Path 5 - Confidence: 0.902
+Number of reactions: 3
+

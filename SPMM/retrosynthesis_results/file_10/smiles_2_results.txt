@@ -1,0 +1,94 @@
+SMILES: CCCCN(CCO)Cc1ccc(CNCc2cccc(OC)c2)cc1
+Prediction ID: 67fa1caae0c12569dca8a981
+Number of paths: 30
+
+Path 1 - Confidence: 0.925
+Number of reactions: 2
+
+Path 2 - Confidence: 0.925
+Number of reactions: 2
+
+Path 3 - Confidence: 0.925
+Number of reactions: 2
+
+Path 4 - Confidence: 0.913
+Number of reactions: 3
+
+Path 5 - Confidence: 0.925
+Number of reactions: 3
+
+Path 6 - Confidence: 0.925
+Number of reactions: 3
+
+Path 7 - Confidence: 0.913
+Number of reactions: 3
+
+Path 8 - Confidence: 0.925
+Number of reactions: 3
+
+Path 9 - Confidence: 0.913
+Number of reactions: 3
+
+Path 10 - Confidence: 0.925
+Number of reactions: 3
+
+Path 11 - Confidence: 0.913
+Number of reactions: 3
+
+Path 12 - Confidence: 0.913
+Number of reactions: 3
+
+Path 13 - Confidence: 0.913
+Number of reactions: 3
+
+Path 14 - Confidence: 0.913
+Number of reactions: 3
+
+Path 15 - Confidence: 0.913
+Number of reactions: 3
+
+Path 16 - Confidence: 0.913
+Number of reactions: 3
+
+Path 17 - Confidence: 0.913
+Number of reactions: 3
+
+Path 18 - Confidence: 0.925
+Number of reactions: 2
+
+Path 19 - Confidence: 0.88
+Number of reactions: 3
+
+Path 20 - Confidence: 0.88
+Number of reactions: 3
+
+Path 21 - Confidence: 0.88
+Number of reactions: 3
+
+Path 22 - Confidence: 0.88
+Number of reactions: 3
+
+Path 23 - Confidence: 0.88
+Number of reactions: 3
+
+Path 24 - Confidence: 0.88
+Number of reactions: 2
+
+Path 25 - Confidence: 0.88
+Number of reactions: 3
+
+Path 26 - Confidence: 0.88
+Number of reactions: 3
+
+Path 27 - Confidence: 0.88
+Number of reactions: 2
+
+Path 28 - Confidence: 0.88
+Number of reactions: 2
+
+Path 29 - Confidence: 0.925
+Number of reactions: 2
+
+Path 30 - Confidence: 0.797
+Number of reactions: 3
+

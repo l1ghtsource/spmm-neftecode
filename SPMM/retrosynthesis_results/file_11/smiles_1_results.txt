@@ -1,0 +1,7 @@
+SMILES: CCCCCCCNC(=S)NCc1cccc(CN(CCCCC)CCCC)c1
+Prediction ID: 67fa1d69e0c12569dca8c039
+Number of paths: 1
+
+Path 1 - Confidence: 0.0
+Number of reactions: 1
+

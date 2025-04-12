@@ -1,0 +1,40 @@
+SMILES: CNCc1ccc(C)cc1
+Prediction ID: 67fa2243e0c12569dca9570e
+Number of paths: 12
+
+Path 1 - Confidence: 0.99
+Number of reactions: 1
+
+Path 2 - Confidence: 0.976
+Number of reactions: 1
+
+Path 3 - Confidence: 0.971
+Number of reactions: 1
+
+Path 4 - Confidence: 0.967
+Number of reactions: 1
+
+Path 5 - Confidence: 0.967
+Number of reactions: 1
+
+Path 6 - Confidence: 0.955
+Number of reactions: 1
+
+Path 7 - Confidence: 0.944
+Number of reactions: 1
+
+Path 8 - Confidence: 0.931
+Number of reactions: 1
+
+Path 9 - Confidence: 0.929
+Number of reactions: 1
+
+Path 10 - Confidence: 0.856
+Number of reactions: 1
+
+Path 11 - Confidence: 0.753
+Number of reactions: 1
+
+Path 12 - Confidence: 0.659
+Number of reactions: 1
+

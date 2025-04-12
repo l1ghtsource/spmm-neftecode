@@ -1,0 +1,22 @@
+SMILES: Cc1ccc(C)c(O)c1
+Prediction ID: 67fa2261e0c12569dca95a5b
+Number of paths: 6
+
+Path 1 - Confidence: 0.968
+Number of reactions: 1
+
+Path 2 - Confidence: 0.917
+Number of reactions: 1
+
+Path 3 - Confidence: 0.908
+Number of reactions: 1
+
+Path 4 - Confidence: 0.908
+Number of reactions: 1
+
+Path 5 - Confidence: 0.903
+Number of reactions: 1
+
+Path 6 - Confidence: 0.902
+Number of reactions: 1
+

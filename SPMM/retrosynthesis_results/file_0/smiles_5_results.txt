@@ -1,0 +1,13 @@
+SMILES: C=Cc1[nH]c2ccccc2c1C=CC
+Prediction ID: 67fa1ac7e0c12569dca87070
+Number of paths: 3
+
+Path 1 - Confidence: 0.844
+Number of reactions: 2
+
+Path 2 - Confidence: 0.844
+Number of reactions: 2
+
+Path 3 - Confidence: 0.844
+Number of reactions: 2
+

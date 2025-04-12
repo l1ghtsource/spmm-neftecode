@@ -9,7 +9,6 @@ import random
 
 @torch.no_grad()
 def get_smiles_embeddings(model, smiles_list):
-    """Extract embeddings for SMILES strings using only the text encoder - process one at a time"""
     device = model.device
     tokenizer = model.tokenizer
     model.eval()
@@ -18,14 +17,11 @@ def get_smiles_embeddings(model, smiles_list):
     all_embeddings = []
     
     for i, smiles in enumerate(smiles_list):
-        # Process single SMILES
         processed_smiles = '[CLS]' + smiles if not smiles.startswith("[CLS]") else smiles
         
-        # Tokenize single SMILES
         text_input = tokenizer([processed_smiles], padding='max_length', truncation=True, 
                               max_length=100, return_tensors="pt").to(device)
         
-        # Get embedding for the SMILES
         text_embeds = model.text_encoder.bert(
             text_input.input_ids[:, 1:], 
             attention_mask=text_input.attention_mask[:, 1:],
@@ -33,18 +29,15 @@ def get_smiles_embeddings(model, smiles_list):
             mode='text'
         ).last_hidden_state
         
-        # Calculate mean embedding
         mask = text_input.attention_mask[:, 1:].unsqueeze(-1)
         masked_embeddings = text_embeds * mask
         sum_embeddings = torch.sum(masked_embeddings, dim=1)
         sum_mask = torch.clamp(torch.sum(mask, dim=1), min=1e-9)
         mean_embeddings = sum_embeddings / sum_mask
         
-        # Store embedding
-        embedding = mean_embeddings.cpu().numpy()[0]  # Get the first (only) item
+        embedding = mean_embeddings.cpu().numpy()[0]
         all_embeddings.append(embedding)
         
-        # Print progress
         if (i + 1) % 100 == 0 or (i + 1) == len(smiles_list):
             print(f"Processed {i + 1}/{len(smiles_list)} SMILES")
     
@@ -98,7 +91,6 @@ def main(args, config):
     model = model.to(device)
 
     print("=" * 50)
-    # Process SMILES strings individually (no batching)
     embeddings = get_smiles_embeddings(model, smiles_list)
     
     df[args.embed_column] = [e.tolist() for e in embeddings]
@@ -123,7 +115,7 @@ if __name__ == '__main__':
 
     config = {
         'embed_dim': 256,
-        'batch_size_test': 64,  # No longer used but kept for compatibility
+        'batch_size_test': 64,
         'bert_config_text': './config_bert.json',
         'bert_config_property': './config_bert_property.json',
     }
