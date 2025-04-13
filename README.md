@@ -22,3 +22,5 @@ SPMM представляет собой мультимодальную моде
 - [код проверки молекулы на стабильность](https://github.com/l1ghtsource/spmm-neftecode/blob/main/stability.py)
 
 Сгенерированные молекулы: [тык](https://github.com/l1ghtsource/spmm-neftecode/blob/main/generated_moleculas.csv)
+
+Презентация: [тык](https://disk.yandex.ru/d/zmH7JqOOpjsojQ)
