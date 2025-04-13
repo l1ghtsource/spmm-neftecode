@@ -18,7 +18,7 @@ SPMM представляет собой мультимодальную моде
 - [pdsc предиктор](https://github.com/l1ghtsource/spmm-neftecode/blob/main/SPMM/spmm_finetune_pdsc.py)
 - [pdsc предиктор (вторая версия с ridge)](https://github.com/l1ghtsource/spmm-neftecode/blob/main/regressor.ipynb)
 - [код ретросинтетического анализа](https://github.com/l1ghtsource/spmm-neftecode/blob/main/retrosynthesis.ipynb)
-- [веб-сервис для работы с ретросинтетическим анализом](https://github.com/l1ghtsource/spmm-neftecode/blob/main/app.py)
+- [веб-сервис для работы с ретросинтетическим анализом](https://github.com/l1ghtsource/spmm-neftecode/blob/main/app.py) (для запуска `streamlit run app.py`)
 - [код проверки молекулы на стабильность](https://github.com/l1ghtsource/spmm-neftecode/blob/main/stability.py)
 
 Сгенерированные молекулы: [тык](https://github.com/l1ghtsource/spmm-neftecode/blob/main/generated_moleculas.csv)
