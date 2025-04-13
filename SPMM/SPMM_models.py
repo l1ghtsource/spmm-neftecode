@@ -13,6 +13,74 @@ class AttrDict(dict):
         self.__dict__ = self
 
 
+class FusionRegressionHead(nn.Module):
+    def __init__(self, input_dim=16, hidden_dim=64):
+        super().__init__()
+
+        # self.norm_text = nn.LayerNorm(input_dim)
+        # self.norm_vec = nn.LayerNorm(input_dim)
+        
+        self.fusion = nn.Sequential(
+            nn.Linear(input_dim * 2, hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(hidden_dim, hidden_dim // 2),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(hidden_dim // 2, 1)  
+        )
+
+    def forward(self, text_features, vec_features):
+        # text = self.norm_text(text_features)
+        # vec = self.norm_vec(vec_features)
+        text, vec = text_features, vec_features
+        x = torch.cat([text, vec], dim=-1)  
+
+        return self.fusion(x)
+
+
+class SPMMDownstreamPropertyPredictor(nn.Module):
+    ''' SPMM for Downstream Regression Task '''
+
+    def __init__(self, config, property_width):
+        super().__init__()
+
+        embed_dim = config.embed_dim
+
+        # Text encoder
+        bert_config = BertConfig.from_json_file(config.bert_config_text)
+        self.text_encoder = BertForMaskedLM(config=bert_config)
+        text_width = self.text_encoder.config.hidden_size
+        self.text_proj = nn.Linear(text_width, embed_dim)
+
+        # Property encoder
+        bert_config2 = BertConfig.from_json_file(config.bert_config_property)
+        self.property_encoder = BertForMaskedLM(config=bert_config2).bert
+        self.property_embed = nn.Linear(1, property_width)
+        self.property_proj = nn.Linear(property_width, embed_dim)
+
+        # Regression head
+        self.regression_head = FusionRegressionHead(input_dim=embed_dim, hidden_dim=config.regression_head_hidden_dim)
+
+    def forward(self, property_original, text_input_ids):
+        # Property features
+        property_feature = self.property_embed(property_original.unsqueeze(2))
+        prop_embeds = self.property_encoder(inputs_embeds=property_feature, return_dict=True).last_hidden_state
+        # prop_atts = torch.ones(prop_embeds.size()[:-1], dtype=torch.long).to(property_feature.device)
+        prop_feat = F.normalize(self.property_proj(prop_embeds[:, 0, :]), dim=-1)
+
+        # Text features
+        text_embeds = self.text_encoder.bert(text_input_ids, attention_mask=None, return_dict=True, mode='text').last_hidden_state
+        text_feat = F.normalize(self.text_proj(text_embeds[:, 0, :]), dim=-1)
+
+        out = self.regression_head(text_feat, prop_feat)
+        
+        return out
+
+
+
+
+
 class SPMM(pl.LightningModule):
     def __init__(self, tokenizer=None, config=None, loader_len=0, no_train=False):
         super().__init__()
