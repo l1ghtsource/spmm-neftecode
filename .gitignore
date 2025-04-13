@@ -3,3 +3,9 @@
 SPMM/__pycache__
 SPMM/scheduler/__pycache__
 catboost_info/
+
+wandb
+.DS_Store
+
+400_tune_data.csv
+data_new_spmm.csv
