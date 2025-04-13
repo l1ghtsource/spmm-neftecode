@@ -139,7 +139,61 @@ def run_ga(start_props=None):
     NUM_GENERATIONS = 100
     MUTATION_RATE = 0.2
     CROSSOVER_RATE = 0.5
-    PROPERTY_RANGE = [(0.0, 1.0) for _ in range(NUM_PROPS)]
+    PROPERTY_RANGE = [
+        (0.5, 3.0),      # BalabanJ
+        (1000.0, 4000.0),   # BertzCT
+        (0.0, 40.0),     # Chi0
+        (0.0, 45.0),     # Chi0n
+        (0.0, 45.0),     # Chi0v
+        (0.0, 40.0),     # Chi1
+        (0.0, 40.0),     # Chi1n
+        (0.0, 40.0),     # Chi1v
+        (0.0, 45.0),     # Chi2n
+        (0.0, 45.0),     # Chi2v
+        (0.0, 40.0),     # Chi3n
+        (0.0, 40.0),     # Chi3v
+        (0.0, 48.0),      # Chi4n
+        (0.0, 48.0),      # Chi4v
+        (500.0, 1000.0),  # ExactMolWt
+        (0.0, 1.0),      # FpDensityMorgan1
+        (0.0, 1.0),      # FpDensityMorgan2
+        (0.0, 1.0),      # FpDensityMorgan3
+        (0.0, 1.0),      # FractionCSP3
+        (-10.0, 5.0),     # HallKierAlpha
+        (5.0, 100.0),     # HeavyAtomCount
+        (80.0, 950.0),   # HeavyAtomMolWt
+        (1.0, 50.0),     # Kappa1
+        (0.0, 30.0),     # Kappa2
+        (0.0, 25.0),     # Kappa3
+        (20.0, 300.0),   # LabuteASA
+        (0.0, 25.0),     # MaxAbsEStateIndex
+        (0.0, 20.0),     # MaxEStateIndex
+        (0.0, 15.0),     # MinAbsEStateIndex
+        (-10.0, 15.0),   # MinEStateIndex
+        (2, 7.0),     # MolLogP
+        (20.0, 150.0),   # MolMR
+        (500.0, 1000.0),  # MolWt
+        (0.0, 12.0),      # NHOHCount
+        (0.0, 15.0),     # NOCount
+        (0.0, 6.0),      # NumAliphaticCarbocycles
+        (0.0, 6.0),      # NumAliphaticHeterocycles
+        (0.0, 6.0),      # NumAliphaticRings
+        (0.0, 6.0),      # NumAromaticCarbocycles
+        (0.0, 6.0),      # NumAromaticHeterocycles
+        (0.0, 12.0),      # NumAromaticRings
+        (0.0, 15.0),     # NumHAcceptors
+        (0.0, 12.0),      # NumHDonors
+        (0.0, 20.0),     # NumHeteroatoms
+        (0.0, 0.0),      # NumRadicalElectrons
+        (0.0, 25.0),     # NumRotatableBonds
+        (0.0, 6.0),      # NumSaturatedCarbocycles
+        (0.0, 6.0),      # NumSaturatedHeterocycles
+        (0.0, 6.0),      # NumSaturatedRings
+        (20.0, 200.0),   # NumValenceElectrons
+        (0.0, 12.0),      # RingCount
+        (0.0, 200.0),    # TPSA
+        (0.0, 1.0)       # QED
+    ]
 
     model, tokenizer = get_surrogate_model()
 
