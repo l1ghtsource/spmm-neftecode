@@ -1,10 +1,13 @@
 SMILES,PDSC
+CC(C)(CCCNc1ncc(-c2ccc(-c3nc(-c4ccc(-c5ccc(-c6ccc7c(c6)[nH]c6ccccc67)cc5O)cc4)nc(-c4ccc5c(c4)oc4ccc(-c6ccccc6)cc45)n3)cc2)cn1)NCC(O)CO,414.8235415354837
 CC(C)(CCCNc1ncc(-c2ccc(-c3nc(-c4ccc(-c5ccc(-c6ccc7c(c6)[nH]c6ccccc67)cc5)cc4)nc(-c4ccc5c(c4)oc4ccc(-c6ccccc6)cc45)n3)cc2)cn1)NCC(O)CO,384.39163931782207
+CCCCCCCCCCCCNc1nc(Nc2ccc(N(c3ccc(-c4ccccc4)cc3)c3ccc(N(c4ccccc4)c4ccc5c(c4)c4ccccc4n5-c4ccccc4)cc3O)cc2)nc2[nH]ccc12,382.6855907198093
 Cc1cc(NC2CCCC2)ccc1-c1cc2nc(-c3ccc(-c4nc5ccc(-c6cc(NCC(O)CNCCc7ccc(-c8ccccc8)cc7)nc(NCc7ccccc7)n6)cc5[nH]4)cc3)[nH]c2cc1C,365.4613832662152
 CCC(C)c1ccc(OCCN(CC(O)COc2ccc(-c3ccc(Nc4ccc5c(c4)c4ccccc4n5C4CCCC4)cc3)cc2)c2ccc(-c3ccc4[nH]ccc4c3)cc2)cc1N,354.57756674201886
 CCCCCCCCCCCCNc1nc(Nc2ccc(N(c3ccc(-c4ccccc4)cc3)c3ccc(N(c4ccccc4)c4ccc5c(c4)c4ccccc4n5-c4ccccc4)cc3)cc2)nc2[nH]ccc12,352.48959126375973
 CCCCCCCCCCOc1nc(Nc2nccc3[nH]c(-c4ccc(-c5ccc(-c6ccc(-c7nc8ccccc8n7C)cc6)cc5)cc4)nc23)nc(-n2c3ccccc3c3cc(CN)ccc32)c1O,341.3147464627802
 Cn1ccnc1-c1cc2c(-c3ccc(-c4ccc(-c5nc(-c6ccc(-c7nc(-c8ccccc8)cc(-c8ccccc8)n7)cc6)[nH]c5)cc4)cc3)n[nH]c2cc1NCCCNCCNc1ccccc1,336.1633490769239
+CCCCCCCCCCOc1nc(Nc2nccc3[nH]c(-c4ccc(-c5ccc(-c6ccc(-c7nc8ccccc8n7C)cc6O)cc5)cc4)nc23)nc(-n2c3ccccc3c3cc(CN)ccc32)c1O,330.1923555876922
 Cc1ccc2cc(-c3nc(-c4ccc(CO)cc4)nc(Nc4ccc(-c5ccc6c(c5)c5ccccc5n6-c5ccc(N6CCC(O)CC6)cc5)cc4)n3)c3c(c2c1)CCC3O,328.38778069021066
 Cc1cc(-c2cc(-c3cc4cc(-c5ccc6c(c5)c5ccccc5n6-c5ccc(-c6ccccc6)cc5)ccc4[nH]3)cc3c2CCCC3)cc(C)c1-c1cc2c(cc1O)C(O)CC2O,321.9340276616891
 Nc1nc(-c2ccccc2)nc(-c2cccc(-c3ccc(-c4cc(-c5ccc(-c6ccccc6)cc5)cc(-c5ccc(C6CCCC6)cc5)c4)c4[nH]c5ccc(-c6ccccn6)cc5c34)c2)n1,312.15434817526904
