@@ -230,7 +230,7 @@ if __name__ == '__main__':
 
     model = model.to(device)
 
-    start_smiles = 'C=C'
+    start_smiles = 'CC(C)(CCCNc1ncc(-c2ccc(-c3nc(-c4ccc(-c5ccc(-c6ccc7c(c6)[nH]c6ccccc67)cc5)cc4)nc(-c4ccc5c(c4)oc4ccc(-c6ccccc6)cc45)n3)cc2)cn1)NCC(O)CO'
     properties = calculate_property(start_smiles)
 
     run_ga(start_props=None)
