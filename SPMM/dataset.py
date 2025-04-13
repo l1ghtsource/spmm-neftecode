@@ -38,7 +38,54 @@ class SMILESDataset_pretrain(Dataset):
         properties = (calculate_property(smiles) - self.property_mean) / self.property_std
 
         return properties, '[CLS]' + smiles
+    
 
+class SMILESDataset_Finetune(Dataset):
+    def __init__(self, data, data_length=None, shuffle=False, mean=None, std=None):
+        self.data = data
+
+        # self.data = [l.strip() for l in lines]
+        with open('./normalize.pkl', 'rb') as w:
+            norm = pickle.load(w)
+        self.property_mean, self.property_std = norm
+
+        if shuffle:
+            self.data = self.data.sample(frac=1).reset_index(drop=True)
+
+        self.data['SMILES'] = self.data['SMILES'].astype(str).str.strip()
+
+        # Filter rows with valid SMILES only
+        def is_valid_smiles(smi):
+            return Chem.MolFromSmiles(smi) is not None
+        
+        initial_size = self.data.shape[0]
+        self.data = self.data[self.data['SMILES'].apply(is_valid_smiles)].reset_index(drop=True)
+        print(f'Filtered out {initial_size - self.data.shape[0]} invalid SMILES')
+
+        if mean is not None and std is not None:
+            self.data['PDSC'] = (self.data['PDSC'] - mean) / std
+
+
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, index):
+        mol = self.data['SMILES'][index]
+
+        mol_rdkit = Chem.MolFromSmiles(mol)
+        if mol_rdkit is None:
+            raise ValueError(f"Invalid SMILES string: {mol}")
+
+        smiles = Chem.MolToSmiles(mol_rdkit, isomericSmiles=False, canonical=True)
+        properties = (calculate_property(smiles) - self.property_mean) / self.property_std
+        target = torch.tensor(self.data['PDSC'][index], dtype=torch.float32)
+
+        return {
+            'properties': properties,
+            'smiles': '[CLS]' + smiles,
+            'target': target
+        }
+    
 
 class SMILESDataset_BACEC(Dataset):
     def __init__(self, data_path, data_length=None, shuffle=False):
