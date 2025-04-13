@@ -1,0 +1,16 @@
+Smiles,flag,PDSC
+CCCCCCc1ccc(-c2ccc(Nc3ccc(C)cc3)cc2)nc1,aromaamin,33.5044657083937
+CCC(C)NC(c1ccc(C)cc1)c1ccc2cc(N(CC)CC)ccc2c1,aromaamin,43.6270313405057
+CCc1ccc(CNCc2ccc(N(CC)CC)cc2)cc1,aromaamin,34.141472948909154
+CCCCc1ccc(-c2cc(NC(CC)c3ccccc3)ccn2)cc1,aromaamin,50.32344804329811
+CCCCCCc1ccc(-c2ncccc2-c2ccc(NC)cc2)cc1,aromaamin,36.45187789744161
+CCCCCCc1ccc(-c2cccc(-c3ccc(NCC)cc3)c2)nc1,aromaamin,28.798361684599467
+CCN(CC)c1ccc(-c2ccc(NC(C)c3ccc(C)cc3)cc2)cc1,aromaamin,60.025424368824034
+CNC(CCCCc1ccc(N(C)C)cc1)c1cccc2ccn(C)c12,aromaamin,42.919643539577656
+CCNC(Cc1ccc(N(C)C)cc1)c1cc2cc(C)ccc2n1CC,aromaamin,45.49576413824255
+CCCCc1ccc(-c2ccc(-c3ccc(NCCC)cc3)nc2)cc1,aromaamin,42.77673781034203
+CCCCNCc1c(C)cc(C)cc1N(c1ccccc1)c1ccccc1,aromaamin,52.45309269778206
+CCCNC(Cc1ccc(N(CC)CC)cc1)c1cccc2ccccc12,aromaamin,58.6464701439107
+CCc1ccccc1NC(c1ccc(CC)cc1)c1c(C)cc(C)cc1C,aromaamin,39.10322634081907
+CCc1ccc(NC(c2ccc(CC)cc2)c2ccc(C)cc2)nc1,aromaamin,29.353028772494817
+CCC(CC)(c1ccccc1)c1ccc(NCc2ccc(C)cc2)cn1,aromaamin,42.00395242657105
