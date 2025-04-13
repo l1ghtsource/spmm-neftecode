@@ -12,7 +12,7 @@ SPMM представляет собой мультимодальную моде
 
 # Результаты
 
-- [код инференса spmm](https://github.com/l1ghtsource/spmm-neftecode/blob/main/spmm-inference.ipynb)
+- [код инференса spmm](https://github.com/l1ghtsource/spmm-neftecode/blob/main/spmm-inference.ipynb) (не забудьте `pip install -r SPMM/requirements.txt`)
 - [модификация кода для генерации smiles по pv](https://github.com/l1ghtsource/spmm-neftecode/blob/main/SPMM/d_pv2smiles_single.py)
 - [генетический алгоритм для максимизации oit](https://github.com/l1ghtsource/spmm-neftecode/blob/main/SPMM/spmm_ga_optimization.py)
 - [pdsc предиктор](https://github.com/l1ghtsource/spmm-neftecode/blob/main/SPMM/spmm_finetune_pdsc.py)
