@@ -56,7 +56,7 @@ def generate_with_property(model, properties, n_sample, prop_mask, k=2, stochast
     device = model.device
     tokenizer = model.tokenizer
     model.eval()
-    print(f"PV-to-SMILES generation in {'stochastic' if stochastic else 'deterministic'} manner with k={k}...")
+    # print(f"PV-to-SMILES generation in {'stochastic' if stochastic else 'deterministic'} manner with k={k}...")
 
     with open('./normalize.pkl', 'rb') as w:
         norm = pickle.load(w)
@@ -75,7 +75,7 @@ def generate_with_property(model, properties, n_sample, prop_mask, k=2, stochast
     prop_embeds = model.property_encoder(inputs_embeds=properties, return_dict=True).last_hidden_state
 
     candidate = []
-    for _ in tqdm(range(n_sample)):
+    for _ in range(n_sample): # for _ in tqdm(range(n_sample)):
         product_input = torch.tensor([tokenizer.cls_token_id]).expand(1, 1).to(device)
         values, indices = generate(model, prop_embeds, product_input, stochastic=stochastic, k=k)
         product_input = torch.cat([torch.tensor([tokenizer.cls_token_id]).expand(k, 1).to(device), indices.squeeze(0).unsqueeze(-1)], dim=-1)
