@@ -84,6 +84,7 @@ Ridge Metrics
 - [Гулякина Анна](https://github.com/Gulyakina) - Презентация
 
 ## Архитектура проекта
+```
 spmm-neftecode/
 ├── app.py                 # Веб-приложение Streamlit для ретросинтетического анализа
 ├── SPMM/                  # Основной модуль: реализация SPMM, генерация молекул, вспомогательные скрипты
@@ -102,6 +103,7 @@ spmm-neftecode/
 ├── generated_moleculas.csv# Сгенерированные молекулы
 ├── requirements.txt       # Зависимости проекта
 └── README.md              # Документация
+```
 
 ## Скриншоты сервиса
 [images/photo.jpg]
